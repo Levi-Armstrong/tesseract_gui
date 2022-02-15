@@ -30,9 +30,26 @@ target_include_directories(${PROJECT_NAME}_acm PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/acm>"
     "$<INSTALL_INTERFACE:include>")
 
+add_library(${PROJECT_NAME}_acm_imgui SHARED
+  src/imgui_add_allowed_collision_entry_dialog.cpp)
+target_link_libraries(${PROJECT_NAME}_acm_imgui PUBLIC
+  tesseract::tesseract_scene_graph
+  tesseract::tesseract_common
+  imgui)
+target_include_directories(${PROJECT_NAME}_acm_imgui PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<INSTALL_INTERFACE:include>")
+
 add_executable(${PROJECT_NAME}_acm_demo demo/acm_demo.cpp )
 target_link_libraries(${PROJECT_NAME}_acm_demo PRIVATE
   ${PROJECT_NAME}_acm)
+
+add_executable(${PROJECT_NAME}_acm_imgui_demo demo/imgui_acm_demo.cpp )
+target_link_libraries(${PROJECT_NAME}_acm_imgui_demo PRIVATE
+  ${PROJECT_NAME}_acm_imgui
+  imgui
+  imgui_opengl2
+  imgui_glut)
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME}
@@ -41,4 +58,9 @@ install(DIRECTORY include/${PROJECT_NAME}
   PATTERN ".svn" EXCLUDE
 )
 
-install_targets(TARGETS ${PROJECT_NAME}_acm ${PROJECT_NAME}_acm_demo)
+install_targets(TARGETS
+  ${PROJECT_NAME}_acm
+  ${PROJECT_NAME}_acm_demo
+  ${PROJECT_NAME}_acm_imgui
+  ${PROJECT_NAME}_acm_imgui_demo
+  imgui)
