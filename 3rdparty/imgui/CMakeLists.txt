@@ -10,6 +10,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(Freetype REQUIRED)
+find_package(glfw3 REQUIRED)
+find_package(GLEW REQUIRED)
 
 add_library(${PROJECT_NAME}
   src/imgui.cpp
@@ -40,6 +42,16 @@ target_include_directories(${PROJECT_NAME}_glut PUBLIC
 target_include_directories(${PROJECT_NAME}_glut SYSTEM PUBLIC
     ${GLUT_INCLUDE_DIRS})
 
+add_library(${PROJECT_NAME}_glfw src/backends/imgui_impl_glfw.cpp)
+target_link_libraries(${PROJECT_NAME}_glfw imgui glfw ${GLEW_LIBRARIES})
+target_compile_definitions(${PROJECT_NAME}_glfw PUBLIC -DImTextureID=ImU64)
+target_compile_features(${PROJECT_NAME}_glfw PRIVATE cxx_std_17)
+target_include_directories(${PROJECT_NAME}_glfw PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<INSTALL_INTERFACE:include>")
+target_include_directories(${PROJECT_NAME}_glfw SYSTEM PUBLIC
+    ${GLEW_INCLUDE_DIRS})
+
 add_library(${PROJECT_NAME}_opengl2 src/backends/imgui_impl_opengl2.cpp)
 target_link_libraries(${PROJECT_NAME}_opengl2 ${OPENGL_LIBRARIES})
 target_compile_definitions(${PROJECT_NAME}_opengl2 PUBLIC -DImTextureID=ImU64)
@@ -48,6 +60,16 @@ target_include_directories(${PROJECT_NAME}_opengl2 PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
 target_include_directories(${PROJECT_NAME}_opengl2 SYSTEM PUBLIC
+    ${OPENGL_INCLUDE_DIRS})
+
+add_library(${PROJECT_NAME}_opengl3 src/backends/imgui_impl_opengl3.cpp)
+target_link_libraries(${PROJECT_NAME}_opengl3 ${OPENGL_LIBRARIES})
+target_compile_definitions(${PROJECT_NAME}_opengl3 PUBLIC -DImTextureID=ImU64)
+target_compile_features(${PROJECT_NAME}_opengl3 PRIVATE cxx_std_17)
+target_include_directories(${PROJECT_NAME}_opengl3 PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<INSTALL_INTERFACE:include>")
+target_include_directories(${PROJECT_NAME}_opengl3 SYSTEM PUBLIC
     ${OPENGL_INCLUDE_DIRS})
 
 install(
@@ -62,7 +84,9 @@ install(
   TARGETS
     ${PROJECT_NAME}
     ${PROJECT_NAME}_glut
+    ${PROJECT_NAME}_glfw
     ${PROJECT_NAME}_opengl2
+    ${PROJECT_NAME}_opengl3
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)

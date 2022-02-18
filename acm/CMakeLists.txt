@@ -35,7 +35,8 @@ add_library(${PROJECT_NAME}_acm_imgui SHARED
 target_link_libraries(${PROJECT_NAME}_acm_imgui PUBLIC
   tesseract::tesseract_scene_graph
   tesseract::tesseract_common
-  imgui)
+  imgui
+  tesseract_gui_imgui)
 target_include_directories(${PROJECT_NAME}_acm_imgui PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
@@ -62,5 +63,4 @@ install_targets(TARGETS
   ${PROJECT_NAME}_acm
   ${PROJECT_NAME}_acm_demo
   ${PROJECT_NAME}_acm_imgui
-  ${PROJECT_NAME}_acm_imgui_demo
-  imgui)
+  ${PROJECT_NAME}_acm_imgui_demo)

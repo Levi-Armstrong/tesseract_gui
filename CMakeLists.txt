@@ -13,6 +13,7 @@ endif()
 
 add_subdirectory(3rdparty/Qt-Advanced-Docking)
 add_subdirectory(3rdparty/imgui)
+add_subdirectory(imgui)
 add_subdirectory(common)
 add_subdirectory(acm)
 add_subdirectory(joint_state_slider)

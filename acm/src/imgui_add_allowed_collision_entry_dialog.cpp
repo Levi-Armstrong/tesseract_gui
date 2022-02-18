@@ -4,8 +4,9 @@
 namespace tesseract_gui
 {
 IMGuiAddAllowedCollisionEntryDialog::IMGuiAddAllowedCollisionEntryDialog()
+  : ImGuiDialog("Add Allowed Collision Entry")
 {
-  if (ImGui::BeginPopupModal("add_allowed_collision_entry_dialog", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+  if (ImGui::BeginPopupModal(name_.c_str(), nullptr, ImGuiWindowFlags_AlwaysAutoResize))
   {
     ImGui::InputText("Link Name 1", link_name1_.data(), ImGuiInputTextFlags_CharsNoBlank);
     ImGui::InputText("Link Name 2", link_name2_.data(), ImGuiInputTextFlags_CharsNoBlank);
@@ -34,13 +35,6 @@ std::string IMGuiAddAllowedCollisionEntryDialog::getLinkName2() const
 std::string IMGuiAddAllowedCollisionEntryDialog::getReason() const
 {
   return reason_;
-}
-
-bool IMGuiAddAllowedCollisionEntryDialog::show() const
-{
-  ImGui::OpenPopup("add_allowed_collision_entry_dialog");
-
-  return false;
 }
 
 }
